@@ -1,43 +1,49 @@
+#pragma once
 #include <SFML/Graphics.hpp>
-#include <player.h>
-#include <inputHandler.h>
 #include <iostream>
+
+#include <dataHandler.h>
+#include <inputHandler.h>
 
 class Game
 {
 private:
-    InputHandler InputHandler;
+    InputHandler inputHandler;
+    DataHandler dataHandler;
+
 public:
-    Game(/* args */){
+    Game(){}
+    ~Game(){}
 
-    }
-    ~Game(){
-
-    }
-
-
+    // -------------- init --------------
     void initialise(){
+        dataHandler.loadTextures();
     }
 
-    void update(sf::Time _elapsed){
-        float delta_time = _elapsed.asMilliseconds();
-        std::cout << delta_time << " ms\n";
-        InputHandler.update();
+    // -------------- update --------------
+    void update(sf::Time pElapsed){
+        float delta_time = pElapsed.asSeconds();
+        inputHandler.update();
+        
+
+
 
 
 
         // reset key states on last call of game update
-        InputHandler.updateKeyState();
+        inputHandler.updateKeyState();
     }
 
-    void render(sf::RenderWindow &_window){
+
+    // -------------- render --------------
+    void render(sf::RenderWindow &pWindow){
         // clear the window with black color
-        _window.clear(sf::Color::Black);
+        pWindow.clear(sf::Color::Black);
 
         // draw everything here...
-        //window.draw(shape);
+        //_window.draw(sprite);
 
         // end the current frame
-        _window.display();
+        pWindow.display();
     }
 };

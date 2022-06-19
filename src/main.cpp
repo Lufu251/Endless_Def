@@ -1,7 +1,10 @@
-#include <game.h>
-
 #include <iostream>
 #include <SFML/System.hpp>
+#include <Shlwapi.h>
+#include <filesystem>
+
+#include <game.h>
+#include <pathSearcher.h>
 
 int main()
 {
@@ -11,9 +14,8 @@ int main()
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
     sf::Clock clock;
-
-    window.setFramerateLimit(60);
     
+    window.setFramerateLimit(60);
 
     game.initialise();
 
