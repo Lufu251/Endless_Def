@@ -4,7 +4,6 @@
 #include <filesystem>
 
 #include <game.h>
-#include <pathSearcher.h>
 
 int main()
 {

@@ -5,27 +5,23 @@
 
 #include <pathSearcher.h>
 
-class DataHandler
+class TextureLoader
 {
 private:
     PathSearcher pS;
 
 public:
     sf::Texture tPlayer;
-    std::filesystem::path path;
+    const std::filesystem::path path= pS.getDirPath("data", 3);
 
-    DataHandler(/* args */){}
-    ~DataHandler(){}
+    TextureLoader(/* args */){}
+    ~TextureLoader(){}
 
     void loadTextures(){
-        path = pS.getDirPath("data", 3);
-
 
         // loading textures from file
-        if (!tPlayer.loadFromFile(path.string() + "/Wood.png")){std::cout << "tPlayer did not load";}
+        if (!tPlayer.loadFromFile(path.string() + "/Player.png")){std::cout << "tPlayer did not load";}
         
 
     }
-
-
 };
