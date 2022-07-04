@@ -4,16 +4,15 @@
 
 #include <renderable.h>
 #include <player.h>
+#include <textureLoader.h>
 
 class EntityRenderer
 {
 private:
-    TextureLoader& textureLoader;
+
 public:
-    EntityRenderer(TextureLoader& tL):textureLoader(tL){}
-    ~EntityRenderer(){}
-    
-    void render(Renderable* b, sf::RenderWindow &pWindow){
+
+    void render(Renderable* b, sf::RenderWindow &pWindow, TextureLoader &tL){
         sf::Sprite sprite;
         Player* p;
         p = dynamic_cast<Player*>(b);
@@ -22,7 +21,7 @@ public:
             case PLAYER:
                 sprite.setPosition(p->position.x, p->position.y);
                 sprite.setColor(sf::Color(255,255,255,255));
-                sprite.setTexture(textureLoader.tPlayer);
+                sprite.setTexture(tL.tPlayer);
             break;
         }
 

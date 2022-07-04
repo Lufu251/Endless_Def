@@ -17,7 +17,9 @@ endif()
 
 include(FetchContent)
 
-include_directories("${CMAKE_CURRENT_LIST_DIR}/include")
+include_directories(
+		"${CMAKE_CURRENT_LIST_DIR}/include" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/states")
 
 add_executable(test
 	src/main.cpp

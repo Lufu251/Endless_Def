@@ -2,38 +2,57 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include <textureLoader.h>
-#include <inputHandler.h>
-#include <gameState.h>
-#include <entityRenderer.h>
+#include <playing.h>
+
 
 
 class Game
 {
 private:
+    bool running = true;
+    // create clock for time measurement between frames
+    sf::Clock clock;
 
 public:
+    sf::RenderWindow window;
     InputHandler inputHandler;
-    TextureLoader textureLoader;
-    GameState gameState;
-    EntityRenderer entityRender;
+    Playing playing;
 
-    Game():entityRender(textureLoader){}
-    ~Game(){}
+    Game(){}
 
-    // -------------- init --------------
-    void initialise(){
-        textureLoader.loadTextures();
-        gameState.player.init(50, 50, textureLoader.tPlayer);
 
-        //test
-        gameState.renderables.push_back(&gameState.player);
+    bool Running() { return running;}
 
+    // ---------------------------- init ----------------------------
+    void init(int width, int height, const char* titel){
+        // create window
+        window.create(sf::VideoMode(width, height), titel);
+
+        playing.init();
+        window.setFramerateLimit(60);
     }
 
-    // -------------- update --------------
-    void update(sf::Time pElapsed){
-        float delta_time = pElapsed.asSeconds();
+
+    // ---------------------------- handleEvents ----------------------------
+    void handleEvents(){
+        // check all the window's events that were triggered since the last iteration of the loop
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // "close requested" event: we close the window
+            if (event.type == sf::Event::Closed){
+                window.close();
+                running = false;
+                std::cout << "window closed";
+            }
+        }
+    }
+
+
+    // ---------------------------- update ----------------------------
+    void update(){
+        // restart clock and calculate time as seconds from last update call
+        float delta_time = clock.restart().asSeconds();
         // check for key input
         inputHandler.update();
 
@@ -45,17 +64,9 @@ public:
         inputHandler.updateKeyState();
     }
 
-    // -------------- render --------------
-    void render(sf::RenderWindow &pWindow){
-        // clear the window with black color
-        pWindow.clear(sf::Color::Black);
 
-        // draw everything here...
-        for(int i=0; i<gameState.renderables.size(); i++){
-        entityRender.render(gameState.renderables[i], pWindow);
-        }
-
-        // end the current frame
-        pWindow.display();
+    // ---------------------------- render ----------------------------
+    void render(){
+        playing.draw(window);
     }
 };
