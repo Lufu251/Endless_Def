@@ -2,21 +2,23 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include <playing.h>
+#include <playState.h>
 
 
 
 class Game
 {
 private:
+    // game still running
     bool running = true;
     // create clock for time measurement between frames
     sf::Clock clock;
+    // vector of all gameStates
+    std::vector<std::unique_ptr<GameState>> states;
 
 public:
     sf::RenderWindow window;
     InputHandler inputHandler;
-    Playing playing;
 
     Game(){}
 
@@ -27,9 +29,8 @@ public:
     void init(int width, int height, const char* titel){
         // create window
         window.create(sf::VideoMode(width, height), titel);
-
-        playing.init();
         window.setFramerateLimit(60);
+        pushBack(std::make_unique<PlayState>());
     }
 
 
@@ -56,8 +57,8 @@ public:
         // check for key input
         inputHandler.update();
 
-
-
+        // update the last GameState object
+        states.back()->update();
 
 
         // reset key states on last call of game update
@@ -67,6 +68,31 @@ public:
 
     // ---------------------------- render ----------------------------
     void render(){
-        playing.draw(window);
+        // draw the last GameState object
+        states.back()->draw(window);
+    }
+
+
+    void changeState(std::unique_ptr<GameState>&& state){
+        // delete the last element
+        if(!states.empty()){
+            states.pop_back();
+        }
+
+        // insert new state at the end
+        states.push_back(std::move(state));
+        states.back()->init();
+    }
+
+    void pushBack(std::unique_ptr<GameState>&& state){
+        // insert new state at the end
+        states.push_back(std::move(state));
+        states.back()->init();
+    }
+
+    void popState(){
+        if(!states.empty()){
+            states.pop_back();
+        }
     }
 };

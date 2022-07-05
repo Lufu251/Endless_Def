@@ -1,7 +1,10 @@
 #include <gameState.h>
 
-class Playing : public GameState
+class PlayState : public GameState
 {
+private:
+    static PlayState pS;
+
 public:
     TextureLoader textureLoader;
     EntityRenderer entityRender;
@@ -9,15 +12,12 @@ public:
     Player player;
     std::vector<Renderable*> renderables;
 
-    Playing(){}
-
     void init(){
         player.init(100,100);
         renderables.push_back(&player);
 
         textureLoader.loadTextures();
 
-        //test
         renderables.push_back(&player);
     }
 
