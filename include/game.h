@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include <inputHandler.h>
 #include <playState.h>
 
 
@@ -13,7 +14,7 @@ private:
     bool running = true;
     // create clock for time measurement between frames
     sf::Clock clock;
-    // vector of all gameStates
+    // all gameStates
     std::vector<std::unique_ptr<GameState>> states;
 
 public:

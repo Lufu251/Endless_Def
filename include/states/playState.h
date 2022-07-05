@@ -1,4 +1,11 @@
+#pragma once
 #include <gameState.h>
+#include <playState.h>
+#include <dataLoader.h>
+#include <entityRenderer.h>
+#include <renderable.h>
+#include <player.h>
+#include <textureEnum.h>
 
 class PlayState : public GameState
 {
@@ -6,19 +13,21 @@ private:
     static PlayState pS;
 
 public:
-    TextureLoader textureLoader;
-    EntityRenderer entityRender;
+    DataLoader dataLoader;
+    EntityRenderer entityRenderer;
 
     Player player;
+    sf::Texture tPlayer;
     std::vector<Renderable*> renderables;
+
+    std::vector<sf::Texture> textures;
 
     void init(){
         player.init(100,100);
         renderables.push_back(&player);
+        dataLoader.setDirectory("data", 3);
 
-        textureLoader.loadTextures();
-
-        renderables.push_back(&player);
+        loadTextures();
     }
 
     void update(){
@@ -31,10 +40,14 @@ public:
 
         // draw all renderables in the vector
         for(int i=0; i<renderables.size(); i++){
-        entityRender.render(renderables[i], pWindow, textureLoader);
+        entityRenderer.render(renderables[i], pWindow, textures);
         }
 
         // end the current frame
         pWindow.display();
+    }
+
+    void loadTextures(){
+        textures.push_back(dataLoader.loadTexture("Player.png"));
     }
 };
