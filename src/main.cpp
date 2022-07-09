@@ -10,7 +10,7 @@ int main()
     // create new game instance
     Game game;
 
-    game.init(800,600,"ENDLESS_DEF");
+    game.init(1500,900,"ENDLESS_DEF");
 
     // run the program as long as the window is open
     while (game.Running())

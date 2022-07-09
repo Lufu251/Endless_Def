@@ -13,7 +13,7 @@ private:
 
 public:
     
-    DataLoader(/* args */){}
+    DataLoader(){}
     ~DataLoader(){}
 
 

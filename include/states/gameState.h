@@ -1,5 +1,7 @@
 #pragma once
 
+#include <inputHandler.h>
+
 class GameState
 {
 private:
@@ -9,6 +11,7 @@ public:
     virtual ~GameState() = default;
 
     virtual void init() = 0;
-    virtual void update() = 0;
-    virtual void draw(sf::RenderWindow &pWindow) = 0;
+    virtual void update(InputHandler &pInputHandler) = 0;
+    virtual void draw() = 0;
+    virtual void handleEvents(bool &pRunning) = 0;
 };

@@ -6,7 +6,6 @@
 #include <playState.h>
 
 
-
 class Game
 {
 private:
@@ -31,23 +30,13 @@ public:
         // create window
         window.create(sf::VideoMode(width, height), titel);
         window.setFramerateLimit(60);
-        pushBack(std::make_unique<PlayState>());
+        pushBack(std::make_unique<PlayState>(window));
     }
 
 
     // ---------------------------- handleEvents ----------------------------
     void handleEvents(){
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed){
-                window.close();
-                running = false;
-                std::cout << "window closed";
-            }
-        }
+        states.back()->handleEvents(running);
     }
 
 
@@ -59,7 +48,7 @@ public:
         inputHandler.update();
 
         // update the last GameState object
-        states.back()->update();
+        states.back()->update(inputHandler);
 
 
         // reset key states on last call of game update
@@ -70,7 +59,7 @@ public:
     // ---------------------------- render ----------------------------
     void render(){
         // draw the last GameState object
-        states.back()->draw(window);
+        states.back()->draw();
     }
 
 
@@ -95,5 +84,9 @@ public:
         if(!states.empty()){
             states.pop_back();
         }
+    }
+
+    void generateWorld(){
+        //world
     }
 };

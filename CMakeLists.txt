@@ -19,6 +19,9 @@ include(FetchContent)
 
 include_directories(
 		"${CMAKE_CURRENT_LIST_DIR}/include" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/lib" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/world" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/entitys" 
 		"${CMAKE_CURRENT_LIST_DIR}/include/states")
 
 add_executable(test
