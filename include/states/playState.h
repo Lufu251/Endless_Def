@@ -4,7 +4,7 @@
 #include <playState.h>
 
 #include <textureEnum.h>
-#include <dataLoader.h>
+#include <dataHandler.h>
 #include <entityRenderer.h>
 #include <worldRenderer.h>
 #include <camera.h>
@@ -26,13 +26,12 @@ public:
     std::vector<sf::Texture> textures;
     World world;
     
-    DataLoader dataLoader;
+    DataHandler dataHandler;
     EntityRenderer entityRenderer;
     WorldRenderer worldRenderer;
     Camera gameCamera;
 
     Player player;
-    Enemy enemy;
 
     PlayState(sf::RenderWindow &pWindow): mWindow(pWindow){}
 
@@ -55,18 +54,19 @@ public:
     }
 
     void init(){
-        dataLoader.setDirectory("data", 3);
+        dataHandler.setTextureDirectory("data/textures", 3);
+        dataHandler.setSaveDirectory("data/saves", 3);
         loadTextures();
 
         gameCamera.reset(sf::FloatRect(0.f, 0.f, static_cast<float>(mWindow.getSize().x), static_cast<float>(mWindow.getSize().y)));
         gameCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
 
-        world.init(60,40,32);
+        world.setTileSize(32);
+        dataHandler.loadWorldFromFile("World2.sv", world);
+        dataHandler.saveWorldToFile("World2.sv", world);
         player.init(0,0);
-        enemy.init(500,500);
 
         renderables.push_back(&player);
-        renderables.push_back(&enemy);
     }
 
     void update(InputHandler &pInputHandler){
@@ -85,7 +85,7 @@ public:
         }
 
         gameCamera.follow(player.position.x, player.position.y);
-        gameCamera.constraint(mWindow, world);
+        gameCamera.constrain(mWindow, world);
         gameCamera.update();
     }
 
@@ -105,8 +105,9 @@ public:
     }
 
     void loadTextures(){
-        textures.push_back(dataLoader.loadTexture("Enemy.png"));
-        textures.push_back(dataLoader.loadTexture("Player.png"));
-        textures.push_back(dataLoader.loadTexture("Ground.png"));
+        textures.push_back(dataHandler.loadTexture("Enemy.png"));
+        textures.push_back(dataHandler.loadTexture("Player.png"));
+        textures.push_back(dataHandler.loadTexture("Ground.png"));
+        textures.push_back(dataHandler.loadTexture("Empty.png"));
     }
 };

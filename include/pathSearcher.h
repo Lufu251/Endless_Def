@@ -39,8 +39,6 @@ public:
                 return curSP / dir;
             }
         }
-        // no 
-        throw std::runtime_error("Could not find the folder 'data'. Please create it in the root folder of the project.");
         return curSP;
     }
 };

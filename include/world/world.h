@@ -1,22 +1,42 @@
 #pragma once
 
-#include <dachLib.h>
 #include <tile.h>
 
 class World
 {
 private:
-
-public:
-    array_2D<Tile> grid;
     int xSize;
     int ySize;
-    int tileSize;
-    
-    void init(int x, int y, int tileSize){
-        grid.setSize(x, y);
+        int tileSize;
+    std::vector<Tile> grid;
+public:
+
+    void resize(int x, int y){
+        grid.resize(x*y);
         xSize = x;
         ySize = y;
-        this->tileSize = tileSize;
+    }
+
+    void setTileSize(int size){
+        tileSize = size;
+    }
+
+    int getTileSize(){
+        return tileSize;
+    }
+    int sizeX(){
+        return xSize;
+    }
+
+    int sizeY(){
+        return ySize;
+    }
+
+    Tile& operator()(size_t x, size_t y){
+        return grid[xSize * y + x];
+    }
+
+    const Tile& operator()(size_t x, size_t y) const {
+        return grid[xSize * y + x];
     }
 };

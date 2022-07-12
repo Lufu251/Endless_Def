@@ -15,15 +15,23 @@ public:
         sf::Sprite sprite;
         
         // loop grid
-        for (int x = 0; x < pWorld.xSize; x++){
-            for (int y = 0; y < pWorld.ySize; y++){
-                
-                switch (pWorld.grid(x,y).getType())
+        for (int x = 0; x < pWorld.sizeX(); x++){
+            for (int y = 0; y < pWorld.sizeY(); y++){
+
+                int textureSize = 32;
+                float scaleX = static_cast<float>(pWorld.getTileSize()) / textureSize;
+                float scaleY = static_cast<float>(pWorld.getTileSize()) / textureSize;
+
+                switch (pWorld(x,y).getType())
                 {
+                    case Empty:
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
+                        sprite.setColor(sf::Color(255,255,255,255));
+                        sprite.setScale(scaleX, scaleY);
+                        sprite.setTexture(pTextures[emptyT]);
+                    break;
                     case Ground:
-                        float scaleX = static_cast<float>(pWorld.tileSize) / static_cast<float>(pTextures[groundT].getSize().x);
-                        float scaleY = static_cast<float>(pWorld.tileSize) / static_cast<float>(pTextures[groundT].getSize().y);
-                        sprite.setPosition(static_cast<float>(x) * pWorld.tileSize, static_cast<float>(y) * pWorld.tileSize);
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
                         sprite.setColor(sf::Color(255,255,255,255));
                         sprite.setScale(scaleX, scaleY);
                         sprite.setTexture(pTextures[groundT]);

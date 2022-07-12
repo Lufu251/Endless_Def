@@ -7,8 +7,8 @@
     This will set the Viewport and the View of the sf:View.
 
     Follow will follow the position you pass in to the function.
-    Constraint will set boundaris to prevent the camera from following over the wolrd borders
-    last call update to change to view to the current location
+    Constrain will set boundaris to prevent the camera from following over the wolrd borders
+    update will set the view to the current offset
 */
 
 #pragma once
@@ -29,22 +29,24 @@ public:
         offset.y = yPosition;
         view.setCenter(offset.x, offset.y);
     }
-    void constraint(sf::Window& window, World &pWorld){
+    void constrain(sf::Window& window, World &pWorld){
         float halfWindowX = static_cast<float>(window.getSize().x / 2);
         float halfWindowY = static_cast<float>(window.getSize().y / 2);
 
         // prevent shifting the tiles over the world border
+        if (offset.x > pWorld.sizeX() * pWorld.getTileSize() - halfWindowX)
+        {offset.x = pWorld.sizeX() * pWorld.getTileSize() - halfWindowX;}
+
+        if (offset.y > pWorld.sizeY() * pWorld.getTileSize() - halfWindowY)
+        {offset.y = pWorld.sizeY() * pWorld.getTileSize() - halfWindowY;}
+
         if (offset.x < halfWindowX)
         {offset.x = halfWindowX;}
 
         if (offset.y < halfWindowY)
         {offset.y = halfWindowY;}
 
-        if (offset.x > pWorld.xSize * pWorld.tileSize - halfWindowX)
-        {offset.x = pWorld.xSize * pWorld.tileSize - halfWindowX;}
 
-        if (offset.y > pWorld.ySize * pWorld.tileSize - halfWindowY)
-        {offset.y = pWorld.ySize * pWorld.tileSize - halfWindowY;}
     }
     void update(){
         view.setCenter(offset.x, offset.y);

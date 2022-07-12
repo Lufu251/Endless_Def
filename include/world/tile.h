@@ -7,7 +7,7 @@ private:
 public:
     Tile(){}
 
-    int getType(){
+    int& getType(){
         return type;
     }
 

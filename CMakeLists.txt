@@ -18,9 +18,9 @@ endif()
 include(FetchContent)
 
 include_directories(
-		"${CMAKE_CURRENT_LIST_DIR}/include" 
-		"${CMAKE_CURRENT_LIST_DIR}/include/lib" 
+		"${CMAKE_CURRENT_LIST_DIR}/include"  
 		"${CMAKE_CURRENT_LIST_DIR}/include/world" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/FastNoiseSIMD" 
 		"${CMAKE_CURRENT_LIST_DIR}/include/entitys" 
 		"${CMAKE_CURRENT_LIST_DIR}/include/states")
 
@@ -29,9 +29,11 @@ add_executable(test
 )
 
 # --------------- SFML ---------------
-FetchContent_Declare(SFML
+FetchContent_Declare(
+	SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x)
+    GIT_TAG 2.6.x
+)
 FetchContent_MakeAvailable(SFML)
 
 target_link_libraries(test
