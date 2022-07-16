@@ -1,5 +1,5 @@
 #pragma once
 
 enum tiles : size_t{
-    Empty, Ground
+    Empty, Grass, Rock
 };

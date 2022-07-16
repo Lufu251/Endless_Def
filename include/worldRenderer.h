@@ -30,11 +30,17 @@ public:
                         sprite.setScale(scaleX, scaleY);
                         sprite.setTexture(pTextures[emptyT]);
                     break;
-                    case Ground:
+                    case Grass:
                         sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
                         sprite.setColor(sf::Color(255,255,255,255));
                         sprite.setScale(scaleX, scaleY);
-                        sprite.setTexture(pTextures[groundT]);
+                        sprite.setTexture(pTextures[grassT]);
+                    break;
+                    case Rock:
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
+                        sprite.setColor(sf::Color(255,255,255,255));
+                        sprite.setScale(scaleX, scaleY);
+                        sprite.setTexture(pTextures[rockT]);
                     break;
                 }
             pWindow.draw(sprite);

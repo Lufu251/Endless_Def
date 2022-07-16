@@ -1,20 +1,17 @@
 #pragma once
 
 #include <tile.h>
+#include <dachlib.h>
 
 class World
 {
 private:
-    int xSize;
-    int ySize;
-        int tileSize;
-    std::vector<Tile> grid;
+    int tileSize;
+    array_2D<Tile> grid;
 public:
 
     void resize(int x, int y){
-        grid.resize(x*y);
-        xSize = x;
-        ySize = y;
+        grid.resize(x, y);
     }
 
     void setTileSize(int size){
@@ -25,18 +22,18 @@ public:
         return tileSize;
     }
     int sizeX(){
-        return xSize;
+        return grid.getSizeX();
     }
 
     int sizeY(){
-        return ySize;
+        return grid.getSizeY();
     }
 
-    Tile& operator()(size_t x, size_t y){
-        return grid[xSize * y + x];
+    Tile& operator()(int x, int y){
+        return grid(x, y);
     }
 
-    const Tile& operator()(size_t x, size_t y) const {
-        return grid[xSize * y + x];
+    const Tile& operator()(int x, int y) const {
+        return grid(x, y);
     }
 };

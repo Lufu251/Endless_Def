@@ -20,7 +20,7 @@ include(FetchContent)
 include_directories(
 		"${CMAKE_CURRENT_LIST_DIR}/include"  
 		"${CMAKE_CURRENT_LIST_DIR}/include/world" 
-		"${CMAKE_CURRENT_LIST_DIR}/include/FastNoiseSIMD" 
+		"${CMAKE_CURRENT_LIST_DIR}/include/lib" 
 		"${CMAKE_CURRENT_LIST_DIR}/include/entitys" 
 		"${CMAKE_CURRENT_LIST_DIR}/include/states")
 
@@ -37,7 +37,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SFML)
 
 target_link_libraries(test
-		sfml-graphics
+		sfml-graphics 
 		sfml-audio 
 		sfml-network 
 		sfml-window 

@@ -5,13 +5,24 @@ class Tile
 private:
     int type = 0;
 public:
+    int blocking = 0;
     Tile(){}
 
     int& getType(){
         return type;
     }
 
+    int& getBlocking(){
+        return blocking;
+    }
+
     void changeType(int t){
         type = t;
+        if(t == 2){
+            blocking = 1;
+        }
+        else{
+            blocking = 0;
+        }
     }
 };
