@@ -27,7 +27,7 @@ public:
             
             switch(b->get_type()){
                 case ENEMY:
-                    e = dynamic_cast<Enemy*>(b);
+                    e = static_cast<Enemy*>(b);
                     sprite = sf::Sprite();
 
                     sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
@@ -36,7 +36,7 @@ public:
                     sprite.setTexture(textures[enemyT]);
                 break;
                 case PLAYER:
-                    p = dynamic_cast<Player*>(b);
+                    p = static_cast<Player*>(b);
                     sprite = sf::Sprite();
 
                     sprite.setPosition(static_cast<float>(p->getPositionRounded().x() -32), static_cast<float>(p->getPositionRounded().y() -32));

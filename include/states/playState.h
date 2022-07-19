@@ -17,6 +17,7 @@
 #include <component.h>
 #include <player.h>
 #include <enemy.h>
+#include <turret.h>
 #include <world.h>
 
 #include <chrono>
@@ -105,6 +106,7 @@ public:
             // render all tiles from the world
             worldRenderer.render(world, mWindow, gameCamera, textures);
             // draw all renderables
+            sortRenderables();
             entityRenderer.render(renderables, mWindow, textures);
 
         // end the current frame
@@ -122,5 +124,15 @@ public:
     void addEntity(const auto& rEntity){
         entitys.push_back(std::make_unique<std::remove_cvref_t<decltype(rEntity)>>(rEntity));
         renderables.push_back(entitys.back().get());
+    }
+    void addComponent(const auto& rComponent){
+        components.push_back(std::make_unique<std::remove_cvref_t<decltype(rComponent)>>(rComponent));
+        renderables.push_back(components.back().get());
+    }
+    void sortRenderables(){
+        auto compare = [](const Renderable* l, const Renderable* r){
+            return l->position.y() < r->position.y();
+        };
+        std::stable_sort(renderables.begin(), renderables.end(), compare);
     }
 };

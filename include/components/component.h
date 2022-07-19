@@ -2,15 +2,13 @@
 
 #include <renderable.h>
 
-class Component
+class Component : public Renderable
 {
-private:
 public:
-    Eigen::Vector2f position;
     Eigen::Vector2f direction;
 
     Component(){}
-    Component(float x, float y) : position(x,y){}
+    Component(float x, float y) : Renderable(x,y){}
     virtual ~Component();
 
     void setPosition(int x, int y){

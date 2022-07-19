@@ -5,11 +5,10 @@
 class Entity : public Renderable
 {
 public:
-    Eigen::Vector2f position;
     Eigen::Vector2f direction;
 
     Entity(){}
-    Entity(float x, float y) : position(x,y){}
+    Entity(float x, float y) : Renderable(x,y){}
     virtual ~Entity(){}
 
 
