@@ -1,6 +1,5 @@
 #pragma once
 
-#include <renderable.h>
 #include <entity.h>
 
 class Enemy : public Entity

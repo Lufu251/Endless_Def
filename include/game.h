@@ -29,7 +29,7 @@ public:
     void init(int width, int height, const char* titel){
         // create window
         window.create(sf::VideoMode(width, height), titel);
-        window.setFramerateLimit(60);
+        window.setFramerateLimit(120);
         pushBack(std::make_unique<PlayState>(window));
     }
 
@@ -90,3 +90,4 @@ public:
         //world
     }
 };
+

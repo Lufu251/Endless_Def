@@ -67,4 +67,9 @@ public:
     sf::View& getView(){
         return view;
     }
+
+    Eigen::Vector2i getOffset(){
+        return offset;
+    }
+    
 };

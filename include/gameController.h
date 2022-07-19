@@ -33,7 +33,6 @@ public:
         direction.normalize();
         direction = direction * 200.f;
         direction = direction * pDeltaTime;
-        std::cout << "x: " << direction.x() << " y: " << direction.y() << "\n";
         
         rPlayer.setDirection(direction);
     }

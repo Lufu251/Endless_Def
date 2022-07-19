@@ -11,12 +11,32 @@ private:
 public:
     WorldRenderer(){}
 
-    void render(World &pWorld, sf::RenderWindow &pWindow, std::vector<sf::Texture>& pTextures){
+    void render(World &pWorld, sf::RenderWindow &pWindow, Camera &pCamera, std::vector<sf::Texture>& pTextures){
         sf::Sprite sprite;
         
-        // loop grid
-        for (int x = 0; x < pWorld.sizeX(); x++){
-            for (int y = 0; y < pWorld.sizeY(); y++){
+        //calculate visible area
+        int xSize = pWindow.getSize().x / pWorld.getTileSize() + 4;
+        int ySize = pWindow.getSize().y / pWorld.getTileSize() + 4;
+        int xStartPosition = (1 + pCamera.getOffset().x() - pWindow.getSize().x /2) / pWorld.getTileSize() -2;
+        int yStartPosition = (1 + pCamera.getOffset().y() - pWindow.getSize().y/2) / pWorld.getTileSize() -2;
+        int xEndPosition = xStartPosition + xSize;
+        int yEndPosition = yStartPosition + ySize;
+        if(xStartPosition < 0){
+            xStartPosition = 0;
+        }
+        if(yStartPosition < 0){
+            yStartPosition = 0;
+        }
+        if(xEndPosition > pWorld.sizeX()){
+            xEndPosition = pWorld.sizeX();
+        }
+        if(yEndPosition > pWorld.sizeY()){
+            yEndPosition = pWorld.sizeY();
+        }
+
+        // loop visible area
+        for (int x = xStartPosition; x < xEndPosition; x++){
+            for (int y = yStartPosition; y < yEndPosition; y++){
 
                 int textureSize = 32;
                 float scaleX = static_cast<float>(pWorld.getTileSize()) / textureSize;
