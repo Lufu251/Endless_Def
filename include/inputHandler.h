@@ -60,7 +60,7 @@ bool key_D = false, once_Key_D = false;
         // -------------- D --------------
         // check if key is pressed and only set true if key was not pressed last frame
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && key_D == false)
-        {   
+        {
             // once when key pressed
             once_Key_D = true;
             key_D = true;

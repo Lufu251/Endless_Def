@@ -43,12 +43,12 @@ public:
     // ---------------------------- update ----------------------------
     void update(){
         // restart clock and calculate time as seconds from last update call
-        float delta_time = clock.restart().asSeconds();
+        float deltaTime = clock.restart().asSeconds();
         // check for key input
         inputHandler.update();
 
         // update the last GameState object
-        states.back()->update(inputHandler);
+        states.back()->update(inputHandler, deltaTime);
 
 
         // reset key states on last call of game update

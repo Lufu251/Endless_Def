@@ -1,8 +1,6 @@
 #pragma once
 
-enum type{
-    RENDERABLE, PLAYER, ENEMY
-};
+#include <entityEnum.h>
 
 class Renderable
 {

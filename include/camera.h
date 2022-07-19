@@ -15,46 +15,51 @@
 
 #include <SFML/Graphics.hpp>
 #include <world.h>
+#include <Eigen/Core>
 
 class Camera
 {
 private:
     sf::View view;
-    sf::Vector2f offset;
+    Eigen::Vector2i offset;
 public:
     Camera(){}
 
     void follow(float xPosition, float yPosition){
-        offset.x = xPosition;
-        offset.y = yPosition;
-        view.setCenter(offset.x, offset.y);
+        offset.x() = static_cast<int>(xPosition);
+        offset.y() = static_cast<int>(yPosition);
+
+        view.setCenter(static_cast<float>(offset.x()), static_cast<float>(offset.y()));
     }
+
     void constrain(sf::Window& window, World &pWorld){
-        float halfWindowX = static_cast<float>(window.getSize().x / 2);
-        float halfWindowY = static_cast<float>(window.getSize().y / 2);
+        int halfWindowX = window.getSize().x / 2;
+        int halfWindowY = window.getSize().y / 2;
 
         // prevent shifting the tiles over the world border
-        if (offset.x > pWorld.sizeX() * pWorld.getTileSize() - halfWindowX)
-        {offset.x = pWorld.sizeX() * pWorld.getTileSize() - halfWindowX;}
+        if (offset.x() > pWorld.sizeX() * pWorld.getTileSize() - halfWindowX)
+        {offset.x() = pWorld.sizeX() * pWorld.getTileSize() - halfWindowX;}
 
-        if (offset.y > pWorld.sizeY() * pWorld.getTileSize() - halfWindowY)
-        {offset.y = pWorld.sizeY() * pWorld.getTileSize() - halfWindowY;}
+        if (offset.y() > pWorld.sizeY() * pWorld.getTileSize() - halfWindowY)
+        {offset.y() = pWorld.sizeY() * pWorld.getTileSize() - halfWindowY;}
 
-        if (offset.x < halfWindowX)
-        {offset.x = halfWindowX;}
+        if (offset.x() < halfWindowX)
+        {offset.x() = halfWindowX;}
 
-        if (offset.y < halfWindowY)
-        {offset.y = halfWindowY;}
+        if (offset.y() < halfWindowY)
+        {offset.y() = halfWindowY;}
 
 
     }
+
     void update(){
-        view.setCenter(offset.x, offset.y);
+        view.setCenter(static_cast<float>(offset.x()), static_cast<float>(offset.y()));
     }
 
     void setViewport(sf::FloatRect rect){
         view.setViewport(rect);
     }
+
     void reset(sf::FloatRect rect){
         view.reset(rect);
     }

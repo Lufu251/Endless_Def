@@ -1,25 +1,16 @@
 #pragma once
 
 #include <renderable.h>
+#include <entity.h>
 
-class Player : public Renderable
+class Player : public Entity
 {
 private:
-
 public:
-    sf::Vector2f position;
     Player(){}
+    Player(float x, float y): Entity(x,y){}
     
     type get_type(){
         return PLAYER;
-    }
-
-    void init(int x, int y){
-        position =  sf::Vector2f((float)x,(float)y);
-        
-    }
-
-    void move(sf::Vector2f move){
-        position += move;
     }
 };
