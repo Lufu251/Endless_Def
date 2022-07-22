@@ -73,7 +73,7 @@ public:
 
         world.setTileSize(64);
         dataHandler.loadWorldFromFile("world.sv", world);
-        addEntity(Player(200,200,65,65));
+        addEntity(Player(200,200,32,32));
         //addEntity(Enemy(400,400,100,100));
         pF.setGridSize(world.sizeX(), world.sizeY());
         pF.setObstacles(world);
@@ -85,6 +85,7 @@ public:
         gameController.setPlayerDirection(entitys, pInputHandler, pDeltaTime);
         entitys[0]->move();
         gameController.worldCollision(world, entitys);
+        gameController.worldBorderConstrain(world, entitys);
 
         gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
         gameCamera.constrain(mWindow, world);
