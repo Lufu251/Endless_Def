@@ -18,7 +18,7 @@ public:
 
     void changeType(int t){
         type = t;
-        if(t == 2){
+        if(t > 0){
             blocking = 1;
         }
         else{

@@ -31,7 +31,7 @@ public:
             }
         Eigen::Vector2f direction(static_cast<float>(right - left), static_cast<float>(down - up));
         direction.normalize();
-        direction = direction * 600.f;
+        direction = direction * 200.f;
         direction = direction * pDeltaTime;
         
         rEntitys[0]->setDirection(direction);

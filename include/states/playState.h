@@ -5,7 +5,7 @@
 
 #include <textureEnum.h>
 #include <dataHandler.h>
-#include <entityRenderer.h>
+#include <renderableRenderer.h>
 #include <worldRenderer.h>
 #include <camera.h>
 #include <inputHandler.h>
@@ -13,11 +13,11 @@
 #include <gameController.h>
 
 #include <renderable.h>
-#include <entity.h>
 #include <component.h>
+#include <turret.h>
+#include <entity.h>
 #include <player.h>
 #include <enemy.h>
-#include <turret.h>
 #include <world.h>
 
 #include <chrono>
@@ -39,9 +39,10 @@ public:
     GameController gameController;
     PathFinder pF;
     DataHandler dataHandler;
-    EntityRenderer entityRenderer;
+    RenderableRenderer renderableRenderer;
     WorldRenderer worldRenderer;
     Camera gameCamera;
+    Turret t;
 
     PlayState(sf::RenderWindow &pWindow): mWindow(pWindow){}
 
@@ -74,7 +75,8 @@ public:
         world.setTileSize(64);
         dataHandler.loadWorldFromFile("world.sv", world);
         addEntity(Player(200,200,32,32));
-        //addEntity(Enemy(400,400,100,100));
+        addEntity(Enemy(400,400,100,100));
+        addComponent(Turret(600,600,100,100));
         pF.setGridSize(world.sizeX(), world.sizeY());
         pF.setObstacles(world);
         //pF.dijkstra(7,7);
@@ -102,18 +104,20 @@ public:
             worldRenderer.render(world, mWindow, gameCamera, textures);
             // draw all renderables
             sortRenderables();
-            entityRenderer.render(renderables, mWindow, textures);
+            renderableRenderer.render(renderables, mWindow, textures);
 
         // end the current frame
         mWindow.display();
     }
 
     void loadTextures(){
-        textures.push_back(dataHandler.loadTexture("player2.png"));
-        textures.push_back(dataHandler.loadTexture("Enemy.png"));
         textures.push_back(dataHandler.loadTexture("grass.png"));
-        textures.push_back(dataHandler.loadTexture("Empty.png"));
-        textures.push_back(dataHandler.loadTexture("rock2.png"));
+        textures.push_back(dataHandler.loadTexture("rock.png"));
+        textures.push_back(dataHandler.loadTexture("borium.png"));
+        textures.push_back(dataHandler.loadTexture("beacore.png"));
+        textures.push_back(dataHandler.loadTexture("spawner.png"));
+        textures.push_back(dataHandler.loadTexture("player.png"));
+        textures.push_back(dataHandler.loadTexture("enemy.png"));
     }
 
     void addEntity(const auto& rEntity){

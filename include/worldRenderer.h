@@ -38,18 +38,12 @@ public:
         for (int x = xStartPosition; x < xEndPosition; x++){
             for (int y = yStartPosition; y < yEndPosition; y++){
 
-                int textureSize = 32;
+                int textureSize = 16;
                 float scaleX = static_cast<float>(pWorld.getTileSize()) / textureSize;
                 float scaleY = static_cast<float>(pWorld.getTileSize()) / textureSize;
 
                 switch (pWorld(x,y).getType())
                 {
-                    case Empty:
-                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
-                        sprite.setColor(sf::Color(255,255,255,255));
-                        sprite.setScale(scaleX, scaleY);
-                        sprite.setTexture(pTextures[emptyT]);
-                    break;
                     case Grass:
                         sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
                         sprite.setColor(sf::Color(255,255,255,255));
@@ -61,6 +55,24 @@ public:
                         sprite.setColor(sf::Color(255,255,255,255));
                         sprite.setScale(scaleX, scaleY);
                         sprite.setTexture(pTextures[rockT]);
+                    break;
+                    case Borium:
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
+                        sprite.setColor(sf::Color(255,255,255,255));
+                        sprite.setScale(scaleX, scaleY);
+                        sprite.setTexture(pTextures[boriumT]);
+                    break;
+                    case Beacore:
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
+                        sprite.setColor(sf::Color(255,255,255,255));
+                        sprite.setScale(scaleX, scaleY);
+                        sprite.setTexture(pTextures[beacoreT]);
+                    break;
+                    case Spawner:
+                        sprite.setPosition(static_cast<float>(x) * pWorld.getTileSize(), static_cast<float>(y) * pWorld.getTileSize());
+                        sprite.setColor(sf::Color(255,255,255,255));
+                        sprite.setScale(scaleX, scaleY);
+                        sprite.setTexture(pTextures[spawnerT]);
                     break;
                 }
             pWindow.draw(sprite);

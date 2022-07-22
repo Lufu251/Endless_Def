@@ -4,8 +4,6 @@
 
 class Enemy : public Entity
 {
-private:
-    
 public:
     Enemy(){}
     Enemy(float x, float y, int sizeX, int sizeY): Entity(x,y,sizeX,sizeY){}

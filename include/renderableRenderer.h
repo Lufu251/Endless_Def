@@ -7,13 +7,13 @@
 #include <textureEnum.h>
 #include <camera.h>
 
-class EntityRenderer
+class RenderableRenderer
 {
 private:
 
 public:
 
-    EntityRenderer(){}
+    RenderableRenderer(){}
 
     void render(std::vector<Renderable*> pRenderables, sf::RenderWindow &pWindow, std::vector<sf::Texture>& textures){
         
@@ -32,7 +32,7 @@ public:
 
                     sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
                     
-                    sprite.setColor(sf::Color(255,255,100,255));
+                    sprite.setColor(sf::Color(255,255,255,255));
                     sprite.setTexture(textures[enemyT]);
                     scaleX = e->size.x() / sprite.getTexture()->getSize().x;
                     scaleY = e->size.y() / sprite.getTexture()->getSize().y;
@@ -41,7 +41,7 @@ public:
                 case PLAYER:
 
                     sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
-                    sprite.setColor(sf::Color(255,255,100,255));
+                    sprite.setColor(sf::Color(255,255,255,255));
                     sprite.setTexture(textures[playerT]);
                     scaleX = e->size.x() / sprite.getTexture()->getSize().x;
                     scaleY = e->size.y() / sprite.getTexture()->getSize().y;

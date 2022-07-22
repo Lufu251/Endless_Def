@@ -6,10 +6,11 @@ class Component : public Renderable
 {
 public:
     Eigen::Vector2f direction;
+    float range;
 
     Component(){}
     Component(float x, float y, int sizeX, int sizeY) : Renderable(x,y,sizeX,sizeY){}
-    virtual ~Component();
+    virtual ~Component(){}
 
     void setPosition(int x, int y){
         position =  Eigen::Vector2f((float)x,(float)y);
