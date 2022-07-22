@@ -118,7 +118,7 @@ public:
 
     void displayUI(){
         sf::Sprite sprite;
-        int scale = 2;
+        float scale = 2;
         sprite.setPosition(0, (float)mWindow.getSize().y / 2 -(134 * scale));
         sprite.setColor(sf::Color(255,255,255,255));
         sprite.setScale(scale, scale);

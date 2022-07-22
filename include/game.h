@@ -23,6 +23,7 @@ public:
 
     Game(){}
 
+
     bool Running() { return running;}
 
     // ---------------------------- init ----------------------------
