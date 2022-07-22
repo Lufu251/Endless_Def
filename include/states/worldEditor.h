@@ -16,6 +16,7 @@ public:
     DataHandler dataHandler;
     WorldRenderer worldRenderer;
     Eigen::Vector2f focus;
+    int currentType = 1;
 
     std::vector<sf::Texture> textures;
 
@@ -65,7 +66,8 @@ public:
     void update(InputHandler &pInputHandler, float &pDeltaTime){
         worldCamera.follow(focus.x(), focus.y());
         worldCamera.update();
-
+        selectType(pInputHandler);
+        edit();
         moveFocus();
     }
 
@@ -77,7 +79,6 @@ public:
         mWindow.setView(worldCamera.getView());
             // render all tiles from the world
             worldRenderer.render(world, mWindow, worldCamera, textures);
-
         mWindow.setView(uiCamera.getView());
             displayUI();
 
@@ -96,7 +97,7 @@ public:
 
     void moveFocus(){
         sf::Vector2i position = sf::Mouse::getPosition();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
              
             if(position != positionOld){
                 focus.x() += positionOld.x - position.x;
@@ -124,5 +125,36 @@ public:
         sprite.setScale(scale, scale);
         sprite.setTexture(textures[playerT]);
         mWindow.draw(sprite);
+    }
+    void selectType(InputHandler &pInputHandler){
+        if(pInputHandler.key_1){
+            currentType = 0;
+        }
+        if(pInputHandler.key_2){
+            currentType = 1;
+            
+        }
+        if(pInputHandler.key_3){
+            currentType = 2;
+            
+        }
+        if(pInputHandler.key_4){
+            currentType = 4;
+            
+        }
+        if(pInputHandler.key_5){
+            currentType = 3;
+            
+        }
+    }
+    void edit(){
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
+            sf::Vector2f worldPos = mWindow.mapPixelToCoords(pixelPos, worldCamera.getView());
+            sf::Vector2i gridPos;
+            gridPos.x = worldPos.x / static_cast<float>(world.getTileSize());
+            gridPos.y = worldPos.y / static_cast<float>(world.getTileSize());
+            world(gridPos.x, gridPos.y).changeType(currentType);
+        }
     }
 };
