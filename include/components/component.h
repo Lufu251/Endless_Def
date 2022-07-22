@@ -8,7 +8,7 @@ public:
     Eigen::Vector2f direction;
 
     Component(){}
-    Component(float x, float y) : Renderable(x,y){}
+    Component(float x, float y, int sizeX, int sizeY) : Renderable(x,y,sizeX,sizeY){}
     virtual ~Component();
 
     void setPosition(int x, int y){

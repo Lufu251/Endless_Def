@@ -8,7 +8,7 @@ private:
     
 public:
     Enemy(){}
-    Enemy(float x, float y): Entity(x,y){}
+    Enemy(float x, float y, int sizeX, int sizeY): Entity(x,y,sizeX,sizeY){}
 
     type get_type(){
         return ENEMY;

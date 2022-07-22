@@ -43,8 +43,6 @@ public:
     WorldRenderer worldRenderer;
     Camera gameCamera;
 
-    Player player;
-
     PlayState(sf::RenderWindow &pWindow): mWindow(pWindow){}
 
     void handleEvents(bool &pRunning){
@@ -73,26 +71,22 @@ public:
         gameCamera.reset(sf::FloatRect(0.f, 0.f, static_cast<float>(mWindow.getSize().x), static_cast<float>(mWindow.getSize().y)));
         gameCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
 
-        world.setTileSize(48);
+        world.setTileSize(64);
         dataHandler.loadWorldFromFile("world.sv", world);
-        player.setPosition(200, 200);
-        addEntity(Enemy(400,400));
-        renderables.push_back(&player);
+        addEntity(Player(200,200,65,65));
+        //addEntity(Enemy(400,400,100,100));
         pF.setGridSize(world.sizeX(), world.sizeY());
         pF.setObstacles(world);
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         //pF.dijkstra(7,7);
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << std::endl;
     }
 
     void update(InputHandler &pInputHandler, float &pDeltaTime){
 
-        gameController.setPlayerDirection(player, pInputHandler, pDeltaTime);
-        player.move();
+        gameController.setPlayerDirection(entitys, pInputHandler, pDeltaTime);
+        entitys[0]->move();
+        gameController.worldCollision(world, entitys);
 
-
-        gameCamera.follow(player.position.x(), player.position.y());
+        gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
         gameCamera.constrain(mWindow, world);
         gameCamera.update();
     }
@@ -114,11 +108,11 @@ public:
     }
 
     void loadTextures(){
-        textures.push_back(dataHandler.loadTexture("player.png"));
+        textures.push_back(dataHandler.loadTexture("player2.png"));
         textures.push_back(dataHandler.loadTexture("Enemy.png"));
         textures.push_back(dataHandler.loadTexture("grass.png"));
         textures.push_back(dataHandler.loadTexture("Empty.png"));
-        textures.push_back(dataHandler.loadTexture("rock.png"));
+        textures.push_back(dataHandler.loadTexture("rock2.png"));
     }
 
     void addEntity(const auto& rEntity){
@@ -131,7 +125,7 @@ public:
     }
     void sortRenderables(){
         auto compare = [](const Renderable* l, const Renderable* r){
-            return l->position.y() < r->position.y();
+            return l->position.y() + l->size.y() < r->position.y() + r->size.y();
         };
         std::stable_sort(renderables.begin(), renderables.end(), compare);
     }

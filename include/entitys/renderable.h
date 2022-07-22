@@ -1,16 +1,15 @@
 #pragma once
 
-#include <entityEnum.h>
+#include <renderableEnum.h>
 #include <Eigen/Core>
 
 class Renderable
 {
-private:
-    /* data */
 public:
     Eigen::Vector2f position;
+    Eigen::Vector2f size;
     Renderable(){}
-    Renderable(float x, float y): position(x, y){
+    Renderable(float x, float y, int sizeX, int sizeY): position(x, y), size(sizeX, sizeY){
     }
     virtual ~Renderable(){}
 
