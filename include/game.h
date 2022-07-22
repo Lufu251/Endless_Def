@@ -4,6 +4,7 @@
 
 #include <inputHandler.h>
 #include <playState.h>
+#include <worldEditor.h>
 
 
 class Game
@@ -30,6 +31,7 @@ public:
         // create window
         window.create(sf::VideoMode(width, height), titel);
         window.setFramerateLimit(60);
+        //pushBack(std::make_unique<WorldEditor>(window));
         pushBack(std::make_unique<PlayState>(window));
     }
 

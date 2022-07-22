@@ -1,7 +1,6 @@
 #pragma once
 
 #include <gameState.h>
-#include <playState.h>
 
 #include <textureEnum.h>
 #include <dataHandler.h>
@@ -42,7 +41,6 @@ public:
     RenderableRenderer renderableRenderer;
     WorldRenderer worldRenderer;
     Camera gameCamera;
-    Turret t;
 
     PlayState(sf::RenderWindow &pWindow): mWindow(pWindow){}
 
@@ -90,7 +88,7 @@ public:
         gameController.worldBorderConstrain(world, entitys);
 
         gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
-        gameCamera.constrain(mWindow, world);
+        //gameCamera.constrain(mWindow, world);
         gameCamera.update();
     }
 
