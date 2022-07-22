@@ -23,7 +23,6 @@ public:
 
     Game(){}
 
-
     bool Running() { return running;}
 
     // ---------------------------- init ----------------------------
@@ -31,8 +30,8 @@ public:
         // create window
         window.create(sf::VideoMode(width, height), titel);
         window.setFramerateLimit(60);
-        //pushBack(std::make_unique<WorldEditor>(window));
-        pushBack(std::make_unique<PlayState>(window));
+        pushBack(std::make_unique<WorldEditor>(window));
+        //pushBack(std::make_unique<PlayState>(window));
     }
 
 

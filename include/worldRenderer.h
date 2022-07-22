@@ -28,7 +28,7 @@ public:
             xStartPosition = 0;
         }
         if(yStartPosition < 0){
-            yStartPosition = 1;
+            yStartPosition = 0;
         }
         if(xEndPosition > pWorld.sizeX()){
             xEndPosition = pWorld.sizeX();
@@ -36,7 +36,6 @@ public:
         if(yEndPosition > pWorld.sizeY()){
             yEndPosition = pWorld.sizeY();
         }
-        std::cout << "xS: " << xStartPosition << " yS: " << yStartPosition << " xE: " << xEndPosition << " yE: " << yEndPosition << "\n";
         // loop visible area
         for (int x = xStartPosition; x < xEndPosition; x++){
             for (int y = yStartPosition; y < yEndPosition; y++){

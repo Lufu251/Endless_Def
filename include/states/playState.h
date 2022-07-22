@@ -88,7 +88,7 @@ public:
         gameController.worldBorderConstrain(world, entitys);
 
         gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
-        //gameCamera.constrain(mWindow, world);
+        gameCamera.constrain(mWindow, world);
         gameCamera.update();
     }
 
