@@ -51,6 +51,14 @@ public:
 
             std::getline(saveFile, line, 'y');
             ySize = std::stoi(line);
+
+            saveFile.ignore();
+            std::getline(saveFile, line, 'x');
+            pWorld.beacorePosition.x() = std::stoi(line);
+
+            std::getline(saveFile, line, 'y');
+            pWorld.beacorePosition.y() = std::stoi(line);
+
             saveFile.ignore();
             pWorld.resize(xSize, ySize);
 
@@ -79,6 +87,7 @@ public:
         if (saveFile.is_open())
         {
             saveFile << pWorld.sizeX() << "x" << pWorld.sizeY() << "y" << "\n";
+            saveFile << pWorld.beacorePosition.x() << "x" << pWorld.beacorePosition.y() << "y" << "\n";
             for (int y = 0; y < pWorld.sizeY(); y++){
                 for (int x = 0; x < pWorld.sizeX(); x++){
                     saveFile << pWorld(x,y).getType();

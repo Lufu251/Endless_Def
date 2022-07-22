@@ -2,13 +2,16 @@
 
 #include <tile.h>
 #include <dachlib.h>
+#include <Eigen/Core>
 
 class World
 {
 private:
     int tileSize;
+    
     array_2D<Tile> grid;
 public:
+    Eigen::Vector2i beacorePosition;
 
     void resize(int x, int y){
         grid.resize(x, y);

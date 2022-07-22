@@ -72,12 +72,12 @@ public:
 
         world.setTileSize(64);
         dataHandler.loadWorldFromFile("world.sv", world);
-        addEntity(Player(200,200,32,32));
+        addEntity(Player(world.beacorePosition.x() *world.getTileSize(),world.beacorePosition.y() *world.getTileSize(),32,32));
         addEntity(Enemy(400,400,100,100));
         addComponent(Turret(600,600,100,100));
         pF.setGridSize(world.sizeX(), world.sizeY());
         pF.setObstacles(world);
-        //pF.dijkstra(7,7);
+        pF.dijkstra(10,37);
     }
 
     void update(InputHandler &pInputHandler, float &pDeltaTime){

@@ -35,6 +35,7 @@ public:
                 mWindow.close();
                 pRunning = false;
                 std::cout << "window closed";
+                dataHandler.saveWorldToFile("editWorld.sv", world);
             }
             if (event.type == sf::Event::Resized){
                 // update the view to the new size of the window
@@ -139,11 +140,11 @@ public:
             
         }
         if(pInputHandler.key_4){
-            currentType = 4;
+            currentType = 3;
             
         }
         if(pInputHandler.key_5){
-            currentType = 3;
+            currentType = 4;
             
         }
     }
@@ -152,9 +153,19 @@ public:
         sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
             sf::Vector2f worldPos = mWindow.mapPixelToCoords(pixelPos, worldCamera.getView());
             sf::Vector2i gridPos;
-            gridPos.x = worldPos.x / static_cast<float>(world.getTileSize());
-            gridPos.y = worldPos.y / static_cast<float>(world.getTileSize());
+            gridPos.x = static_cast<int>(worldPos.x / static_cast<float>(world.getTileSize()));
+            gridPos.y = static_cast<int>(worldPos.y / static_cast<float>(world.getTileSize()));
+            gridPos.x = std::clamp(gridPos.x, 0, world.sizeX()-1);
+            gridPos.y = std::clamp(gridPos.y, 0, world.sizeY()-1);
+            if(currentType != 3){
             world(gridPos.x, gridPos.y).changeType(currentType);
+            }
+            else{
+                world(world.beacorePosition.x(), world.beacorePosition.y()).changeType(0);
+                world(gridPos.x, gridPos.y).changeType(currentType);
+                world.beacorePosition.x() = gridPos.x;
+                world.beacorePosition.y() = gridPos.y;
+            }
         }
     }
 };
