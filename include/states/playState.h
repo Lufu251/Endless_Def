@@ -2,7 +2,6 @@
 
 #include <gameState.h>
 
-#include <textureEnum.h>
 #include <dataHandler.h>
 #include <renderableRenderer.h>
 #include <worldRenderer.h>
@@ -72,7 +71,7 @@ public:
 
         world.setTileSize(64);
         dataHandler.loadWorldFromFile("world.sv", world);
-        addEntity(Player(world.beacorePosition.x() *world.getTileSize(),world.beacorePosition.y() *world.getTileSize(),32,32));
+        addEntity(Player(world.beacorePosition.x() * (float)world.getTileSize(),world.beacorePosition.y() * (float)world.getTileSize(),32,32));
         addEntity(Enemy(400,400,100,100));
         addComponent(Turret(600,600,100,100));
         pF.setGridSize(world.sizeX(), world.sizeY());
@@ -99,23 +98,23 @@ public:
         // set the view to 
         mWindow.setView(gameCamera.getView());
             // render all tiles from the world
-            worldRenderer.render(world, mWindow, gameCamera, textures);
+            worldRenderer.render(world, mWindow, gameCamera, dataHandler);
             // draw all renderables
             sortRenderables();
-            renderableRenderer.render(renderables, mWindow, textures);
+            renderableRenderer.render(renderables, mWindow, dataHandler);
 
         // end the current frame
         mWindow.display();
     }
 
     void loadTextures(){
-        textures.push_back(dataHandler.loadTexture("grass.png"));
-        textures.push_back(dataHandler.loadTexture("rock.png"));
-        textures.push_back(dataHandler.loadTexture("borium.png"));
-        textures.push_back(dataHandler.loadTexture("beacore.png"));
-        textures.push_back(dataHandler.loadTexture("spawner.png"));
-        textures.push_back(dataHandler.loadTexture("player.png"));
-        textures.push_back(dataHandler.loadTexture("enemy.png"));
+        dataHandler.loadTexture("grassT", "grass.png");
+        dataHandler.loadTexture("rockT", "rock.png");
+        dataHandler.loadTexture("boriumT", "borium.png");
+        dataHandler.loadTexture("beacoreT","beacore.png");
+        dataHandler.loadTexture("spawnerT","spawner.png");
+        dataHandler.loadTexture("playerT","player.png");
+        dataHandler.loadTexture("enemyT","enemy.png");
     }
 
     void addEntity(const auto& rEntity){

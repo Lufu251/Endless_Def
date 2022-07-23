@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <filesystem>
 #include <string>
@@ -14,6 +15,7 @@ private:
     PathSearcher pS;
     std::filesystem::path texturePath;
     std::filesystem::path savePath;
+    std::unordered_map<std::string, sf::Texture> textures;
 
 public:
     
@@ -29,12 +31,16 @@ public:
         savePath = pS.getDirPath(name, depth);
     }
     
-    sf::Texture loadTexture(std::string fileName){
+    void loadTexture(std::string name, std::string fileName){
         sf::Texture texture;
         if(!texture.loadFromFile(texturePath.string() + "/" + fileName)){
             std::cout << fileName << " could not load \n";
         }
-        return texture;
+        textures.insert(std::make_pair(name, texture));
+    }
+
+    sf::Texture& getTexture(std::string name){
+        return textures[name];
     }
 
     void loadWorldFromFile(std::string fileName, World &pWorld){

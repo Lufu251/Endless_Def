@@ -79,7 +79,7 @@ public:
         // set the view to 
         mWindow.setView(worldCamera.getView());
             // render all tiles from the world
-            worldRenderer.render(world, mWindow, worldCamera, textures);
+            worldRenderer.render(world, mWindow, worldCamera, dataHandler);
         mWindow.setView(uiCamera.getView());
             displayUI();
 
@@ -88,12 +88,12 @@ public:
     }
 
     void loadTextures(){
-        textures.push_back(dataHandler.loadTexture("grass.png"));
-        textures.push_back(dataHandler.loadTexture("rock.png"));
-        textures.push_back(dataHandler.loadTexture("borium.png"));
-        textures.push_back(dataHandler.loadTexture("beacore.png"));
-        textures.push_back(dataHandler.loadTexture("spawner.png"));
-        textures.push_back(dataHandler.loadTexture("worldEditorUI.png"));
+        dataHandler.loadTexture("grassT", "grass.png");
+        dataHandler.loadTexture("rockT", "rock.png");
+        dataHandler.loadTexture("boriumT", "borium.png");
+        dataHandler.loadTexture("beacoreT","beacore.png");
+        dataHandler.loadTexture("spawnerT","spawner.png");
+        dataHandler.loadTexture("worldEditorUIT", "worldEditorUI.png");
     }
 
     void moveFocus(){
@@ -124,7 +124,7 @@ public:
         sprite.setPosition(0, (float)mWindow.getSize().y / 2 -(134 * scale));
         sprite.setColor(sf::Color(255,255,255,255));
         sprite.setScale(scale, scale);
-        sprite.setTexture(textures[playerT]);
+        sprite.setTexture(dataHandler.getTexture("worldEditorUIT"));
         mWindow.draw(sprite);
     }
     void selectType(InputHandler &pInputHandler){

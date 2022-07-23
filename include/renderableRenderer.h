@@ -4,7 +4,6 @@
 
 #include <renderable.h>
 #include <Entity.h>
-#include <textureEnum.h>
 #include <camera.h>
 
 class RenderableRenderer
@@ -15,7 +14,7 @@ public:
 
     RenderableRenderer(){}
 
-    void render(std::vector<Renderable*> pRenderables, sf::RenderWindow &pWindow, std::vector<sf::Texture>& textures){
+    void render(std::vector<Renderable*> pRenderables, sf::RenderWindow &pWindow, DataHandler &dataHandler){
         
 
 
@@ -33,7 +32,7 @@ public:
                     sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
                     
                     sprite.setColor(sf::Color(255,255,255,255));
-                    sprite.setTexture(textures[enemyT]);
+                    sprite.setTexture(dataHandler.getTexture("enemyT"));
                     scaleX = e->size.x() / sprite.getTexture()->getSize().x;
                     scaleY = e->size.y() / sprite.getTexture()->getSize().y;
                     sprite.setScale(scaleX, scaleY);
@@ -42,7 +41,7 @@ public:
 
                     sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
                     sprite.setColor(sf::Color(255,255,255,255));
-                    sprite.setTexture(textures[playerT]);
+                    sprite.setTexture(dataHandler.getTexture("playerT"));
                     scaleX = e->size.x() / sprite.getTexture()->getSize().x;
                     scaleY = e->size.y() / sprite.getTexture()->getSize().y;
                     sprite.setScale(scaleX, scaleY);
