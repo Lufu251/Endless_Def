@@ -1,216 +1,163 @@
 #pragma once
+
 #include <SFML/System.hpp>
 #include <iostream>
+#include <unordered_map>
+#include <Eigen/Core>
+
+
+
+struct key
+{
+    sf::Keyboard::Key type;
+    bool lastFrame = false;
+    bool pressed = false, pressedOnce = false;
+
+    key(){}
+    key(sf::Keyboard::Key keyboardKey): type(keyboardKey){}
+
+    void checkPressed(){
+        // check if key is pressed and only set true if key was not pressed last frame
+        if (sf::Keyboard::isKeyPressed(type) && lastFrame == false)
+        {   
+            // once when key pressed
+            pressedOnce = true;
+            pressed = true;
+        }
+    }
+
+    void checkReleased(){
+        // check if key is not pressed and only set false if key was pressed last frame
+        if (!sf::Keyboard::isKeyPressed(type) && lastFrame == true)
+        {
+            // once when key released
+            pressed = false;
+        }
+    }
+
+    void updateState(){
+        // current state to last key state from next frame
+        lastFrame = pressed;
+
+        // reset once_Key state
+        pressedOnce = false;
+
+    }
+};
+
+struct mButton
+{
+    sf::Mouse::Button type;
+    bool lastFrame = false;
+    bool pressed = false, pressedOnce = false;
+
+    mButton(){}
+    mButton(sf::Mouse::Button mouseButton): type(mouseButton){}
+
+    void checkPressed(){
+        // check if key is pressed and only set true if key was not pressed last frame
+        if (sf::Mouse::isButtonPressed(type) && lastFrame == false)
+        {   
+            // once when key pressed
+            pressedOnce = true;
+            pressed = true;
+        }
+    }
+
+    void checkReleased(){
+        // check if key is not pressed and only set false if key was pressed last frame
+        if (!sf::Mouse::isButtonPressed(type) && lastFrame == true)
+        {
+            // once when key released
+            pressed = false;
+        }
+    }
+
+    void updateState(){
+        // current state to last key state from next frame
+        lastFrame = pressed;
+
+        // reset once_Key state
+        pressedOnce = false;
+
+    }
+};
+
 
 class InputHandler
 {
-private:
+    std::unordered_map<std::string, key> keys;
+    std::unordered_map<std::string, mButton> mButtons;
 
-// privat bool for logic reasons
-bool last_Key_W = false;
-bool last_Key_A = false;
-bool last_Key_S = false;
-bool last_Key_D = false;
-bool last_Key_1 = false;
-bool last_Key_2 = false;
-bool last_Key_3 = false;
-bool last_Key_4 = false;
-bool last_Key_5 = false;
+    Eigen::Vector2i mousePosition;
 
-public:
-
-// public bool to check if the key was pressed
-bool key_W = false, once_Key_W = false;
-bool key_A = false, once_Key_A = false;
-bool key_S = false, once_Key_S = false;
-bool key_D = false, once_Key_D = false;
-bool key_1 = false, once_Key_1 = false;
-bool key_2 = false, once_Key_2 = false;
-bool key_3 = false, once_Key_3 = false;
-bool key_4 = false, once_Key_4 = false;
-bool key_5 = false, once_Key_5 = false;
-
+    public:
     InputHandler(/* args */){}
     ~InputHandler(){}
 
 
-    void update(){
-        checkKeysPressed();
-        checkKeysReleased();
+    void update(sf::RenderWindow &pWindow){
+        // iterate all keys
+        for (auto& [key, value]: keys) {
+            // Do stuff
+            value.checkPressed();
+            value.checkReleased();
+        }
+
+        for (auto& [key, value]: mButtons) {
+            // Do stuff
+            value.checkPressed();
+            value.checkReleased();
+        }
+
+        updateMousePosition(pWindow);
     }
+
     
-    
-    void checkKeysPressed(){
-        // -------------- W --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && key_W == false)
-        {   
-            // once when key pressed
-            once_Key_W = true;
-            key_W = true;
-        }
 
-        // -------------- A --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && key_A == false)
-        {   
-            // once when key pressed
-            once_Key_A = true;
-            key_A = true;
-        }
-        // -------------- S --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && key_S == false)
-        {   
-            // once when key pressed
-            once_Key_S = true;
-            key_S = true;
-        }
-
-        // -------------- D --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && key_D == false)
-        {
-            // once when key pressed
-            once_Key_D = true;
-            key_D = true;
-        }
-        // -------------- 1 --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && key_1 == false)
-        {
-            // once when key pressed
-            once_Key_1 = true;
-            key_1 = true;
-        }
-        // -------------- 2 --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && key_2 == false)
-        {
-            // once when key pressed
-            once_Key_2 = true;
-            key_2 = true;
-        }
-        // -------------- 3 --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && key_3 == false)
-        {
-            // once when key pressed
-            once_Key_3 = true;
-            key_3 = true;
-        }
-        // -------------- 4 --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && key_4 == false)
-        {
-            // once when key pressed
-            once_Key_4 = true;
-            key_4 = true;
-        }
-        // -------------- 5 --------------
-        // check if key is pressed and only set true if key was not pressed last frame
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && key_5 == false)
-        {
-            // once when key pressed
-            once_Key_5 = true;
-            key_5 = true;
-        }
-
-    }
-
-    void checkKeysReleased(){
-        // -------------- W --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && last_Key_W == true)
-        {
-            // once when key released
-            key_W = false;
-        }
-
-        // -------------- A --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && last_Key_A == true)
-        {
-            // once when key released
-            key_A = false;
-        }
-
-        // -------------- S --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S) && last_Key_S == true)
-        {
-            // once when key released
-            key_S = false;
-        }
-
-        // -------------- D --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && last_Key_D == true)
-        {
-            // once when key released
-            key_D = false;
-        }
-        // -------------- 1 --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && last_Key_1 == true)
-        {
-            // once when key released
-            key_1 = false;
-        }
-        // -------------- 2 --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && last_Key_2 == true)
-        {
-            // once when key released
-            key_2 = false;
-        }
-        // -------------- 3 --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && last_Key_3 == true)
-        {
-            // once when key released
-            key_3 = false;
-        }
-        // -------------- 4 --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && last_Key_4 == true)
-        {
-            // once when key released
-            key_4 = false;
-        }
-        // -------------- 5 --------------
-        // check if key is not pressed and only set false if key was pressed last frame
-        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && last_Key_5 == true)
-        {
-            // once when key released
-            key_5 = false;
-        }
-    }
     // update the key states
-    void updateKeyState(){
-        // current state to last key state from next frame
-        last_Key_W = key_W;
-        last_Key_A = key_A;
-        last_Key_S = key_S;
-        last_Key_D = key_D;
-        last_Key_1 = key_1;
-        last_Key_2 = key_2;
-        last_Key_3 = key_3;
-        last_Key_4 = key_4;
-        last_Key_5 = key_5;
+    void updateState(){
+        for (auto& [key, value]: keys) {
+            // Do stuff
+            value.updateState();
+        }
 
+        for (auto& [key, value]: mButtons) {
+            // Do stuff
+            value.updateState();
+        }
+        
+    }
+    bool isMousePressed(std::string name){
+        return mButtons[name].pressed;
+    }
 
+    bool isMousePressedOnce(std::string name){
+        return mButtons[name].pressedOnce;
+    }
 
-        // reset once_Key state
-        once_Key_W = false;
-        once_Key_A = false;
-        once_Key_S = false;
-        once_Key_D = false;
-        once_Key_1 = false;
-        once_Key_2 = false;
-        once_Key_3 = false;
-        once_Key_4 = false;
-        once_Key_5 = false;
+    bool isKeyPressed(std::string name){
+        return keys[name].pressed;
+    }
+
+    bool isKeyPressedOnce(std::string name){
+        return keys[name].pressedOnce;
+    }
+
+    void newKeyboardKey(std::string name, sf::Keyboard::Key type){
+        keys.insert(std::make_pair(name, key(type)));
+    }
+    void newMouseButton(std::string name, sf::Mouse::Button type){
+        mButtons.insert(std::make_pair(name, mButton(type)));
+    }
+
+    void updateMousePosition(sf::RenderWindow &pWindow){
+        sf::Vector2i mP = sf::Mouse::getPosition(pWindow);
+        mousePosition.x() = mP.x;
+        mousePosition.y() = mP.y;
+    }
+    Eigen::Vector2i getMousePosition(sf::RenderWindow &pWindow){
+        return Eigen::Vector2i(mousePosition.x(), mousePosition.y());
     }
 };
  

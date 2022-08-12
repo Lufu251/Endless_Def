@@ -15,13 +15,23 @@ private:
     PathSearcher pS;
     std::filesystem::path texturePath;
     std::filesystem::path savePath;
-    std::unordered_map<std::string, sf::Texture> textures;
+    
+    
 
 public:
-    
+    std::unordered_map<std::string, sf::Texture> textures;
+    std::vector<std::string> worlds;
+    sf::Font font;
+
     DataHandler(){}
     ~DataHandler(){}
 
+    void loadFont(std::string fileName){
+        if (!font.loadFromFile(texturePath.string() + "/" + fileName))
+        {
+            std::cout << "couldn't load font";
+        }
+    }
 
     void setTextureDirectory(std::string name, int depth){
         texturePath = pS.getDirPath(name, depth);
@@ -40,7 +50,20 @@ public:
     }
 
     sf::Texture& getTexture(std::string name){
-        return textures[name];
+        if(textures.count(name) == 0){
+            std::cout << "texture does not exist or was not yet loaded" << "\n";
+            return textures["null"];
+        }
+        else{
+            return textures[name];
+        }
+    }
+
+    void getAllWorldsfromFolder(){
+        for (const auto & entry : std::filesystem::directory_iterator(savePath)){
+            std::string name = entry.path().filename().string();
+            worlds.push_back(name);
+        }
     }
 
     void loadWorldFromFile(std::string fileName, World &pWorld){

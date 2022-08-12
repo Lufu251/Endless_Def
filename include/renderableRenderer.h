@@ -29,7 +29,7 @@ public:
             switch(b->get_type()){
                 case ENEMY:
 
-                    sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
+                    sprite.setPosition(float(e->getPositionRounded().x()), float(e->getPositionRounded().y()));
                     
                     sprite.setColor(sf::Color(255,255,255,255));
                     sprite.setTexture(dataHandler.getTexture("enemyT"));
@@ -39,7 +39,7 @@ public:
                 break;
                 case PLAYER:
 
-                    sprite.setPosition(static_cast<float>(e->getPositionRounded().x()), static_cast<float>(e->getPositionRounded().y()));
+                    sprite.setPosition(float(e->getPositionRounded().x()), float(e->getPositionRounded().y()));
                     sprite.setColor(sf::Color(255,255,255,255));
                     sprite.setTexture(dataHandler.getTexture("playerT"));
                     scaleX = e->size.x() / sprite.getTexture()->getSize().x;

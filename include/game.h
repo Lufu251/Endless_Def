@@ -31,8 +31,8 @@ public:
         // create window
         window.create(sf::VideoMode(width, height), titel);
         window.setFramerateLimit(120);
-        //pushBack(std::make_unique<WorldEditor>(window));
-        pushBack(std::make_unique<PlayState>(window));
+        pushBack(std::make_unique<WorldEditor>(window));
+        //pushBack(std::make_unique<PlayState>(window));
     }
 
 
@@ -47,14 +47,14 @@ public:
         // restart clock and calculate time as seconds from last update call
         float deltaTime = clock.restart().asSeconds();
         // check for key input
-        inputHandler.update();
+        inputHandler.update(window);
 
         // update the last GameState object
         states.back()->update(inputHandler, deltaTime);
 
 
         // reset key states on last call of game update
-        inputHandler.updateKeyState();
+        inputHandler.updateState();
     }
 
 
@@ -73,13 +73,13 @@ public:
 
         // insert new state at the end
         states.push_back(std::move(state));
-        states.back()->init();
+        states.back()->init(inputHandler);
     }
 
     void pushBack(std::unique_ptr<GameState>&& state){
         // insert new state at the end
         states.push_back(std::move(state));
-        states.back()->init();
+        states.back()->init(inputHandler);
     }
 
     void popState(){

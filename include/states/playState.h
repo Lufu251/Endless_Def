@@ -61,15 +61,20 @@ public:
         }
     }
 
-    void init(){
+    void init(InputHandler &pInputHandler){
         dataHandler.setTextureDirectory("data/textures", 3);
         dataHandler.setSaveDirectory("data/saves", 3);
         loadTextures();
-
+        pInputHandler.newKeyboardKey("key_W", sf::Keyboard::W);
+        pInputHandler.newKeyboardKey("key_A", sf::Keyboard::A);
+        pInputHandler.newKeyboardKey("key_S", sf::Keyboard::S);
+        pInputHandler.newKeyboardKey("key_D", sf::Keyboard::D);
+        pInputHandler.newMouseButton("left", sf::Mouse::Left);
+        
         gameCamera.reset(sf::FloatRect(0.f, 0.f, static_cast<float>(mWindow.getSize().x), static_cast<float>(mWindow.getSize().y)));
         gameCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
 
-        world.setTileSize(64);
+        world.setTileSize(32);
         dataHandler.loadWorldFromFile("world.sv", world);
         addEntity(Player(world.beacorePosition.x() * (float)world.getTileSize(),world.beacorePosition.y() * (float)world.getTileSize(),32,32));
         addEntity(Enemy(400,400,100,100));
