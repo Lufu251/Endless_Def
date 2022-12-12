@@ -161,3 +161,4 @@ class InputHandler
     }
 };
  
+ extern InputHandler inputHandler;

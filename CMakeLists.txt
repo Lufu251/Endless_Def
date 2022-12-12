@@ -43,7 +43,6 @@ target_link_libraries(test
 		sfml-network 
 		sfml-window 
 		sfml-system
-
 )
 
 # --------------- Eigen ---------------

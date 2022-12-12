@@ -9,6 +9,7 @@
 #include <inputHandler.h>
 #include <pathFinder.h>
 #include <gameController.h>
+#include <SFML/Graphics.hpp>
 
 #include <renderable.h>
 #include <component.h>
@@ -25,7 +26,6 @@ class PlayState : public GameState
 private:
 
 public:
-    sf::RenderWindow &mWindow;
     World world;
 
     std::vector<Renderable*> renderables;
@@ -33,6 +33,8 @@ public:
     std::vector<std::unique_ptr<Component>> components;
 
     std::vector<sf::Texture> textures;
+
+    InputHandler inputHandler;
     
     GameController gameController;
     PathFinder pF;
@@ -41,16 +43,16 @@ public:
     WorldRenderer worldRenderer;
     Camera gameCamera;
 
-    PlayState(sf::RenderWindow &pWindow): mWindow(pWindow){}
+    PlayState(sf::RenderWindow &rWindow): GameState(rWindow){}
 
     void handleEvents(bool &pRunning){
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while (mWindow.pollEvent(event))
+        while (window.pollEvent(event))
         {
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed){
-                mWindow.close();
+                window.close();
                 pRunning = false;
                 std::cout << "window closed";
             }
@@ -61,17 +63,18 @@ public:
         }
     }
 
-    void init(InputHandler &pInputHandler){
+    void init(){
         dataHandler.setTextureDirectory("data/textures", 3);
         dataHandler.setSaveDirectory("data/saves", 3);
         loadTextures();
-        pInputHandler.newKeyboardKey("key_W", sf::Keyboard::W);
-        pInputHandler.newKeyboardKey("key_A", sf::Keyboard::A);
-        pInputHandler.newKeyboardKey("key_S", sf::Keyboard::S);
-        pInputHandler.newKeyboardKey("key_D", sf::Keyboard::D);
-        pInputHandler.newMouseButton("left", sf::Mouse::Left);
+
+        inputHandler.newKeyboardKey("key_W", sf::Keyboard::W);
+        inputHandler.newKeyboardKey("key_A", sf::Keyboard::A);
+        inputHandler.newKeyboardKey("key_S", sf::Keyboard::S);
+        inputHandler.newKeyboardKey("key_D", sf::Keyboard::D);
+        inputHandler.newMouseButton("left", sf::Mouse::Left);
         
-        gameCamera.reset(sf::FloatRect(0.f, 0.f, static_cast<float>(mWindow.getSize().x), static_cast<float>(mWindow.getSize().y)));
+        gameCamera.reset(sf::FloatRect(0.f, 0.f, static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)));
         gameCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
 
         world.setTileSize(32);
@@ -84,32 +87,32 @@ public:
         pF.dijkstra(10,37);
     }
 
-    void update(InputHandler &pInputHandler, float &pDeltaTime){
+    void update(float &pDeltaTime){
+        // check for key input
+        inputHandler.update(window);
 
-        gameController.setPlayerDirection(entitys, pInputHandler, pDeltaTime);
-        entitys[0]->move();
-        gameController.worldCollision(world, entitys);
-        gameController.worldBorderConstrain(world, entitys);
+            gameController.setPlayerDirection(entitys, inputHandler, pDeltaTime);
+            entitys[0]->move();
+            gameController.worldCollision(world, entitys);
+            gameController.worldBorderConstrain(world, entitys);
 
-        gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
-        gameCamera.constrain(mWindow, world);
-        gameCamera.update();
+            gameCamera.follow(entitys[0]->position.x() +entitys[0]->size.x() /2, entitys[0]->position.y() +entitys[0]->size.y() /2);
+            gameCamera.constrain(window, world);
+            gameCamera.update();
+
+        // reset key states on last call of game update
+        inputHandler.updateState();
     }
 
     void draw(){
-        // clear the window with black color
-        mWindow.clear(sf::Color::Black);
 
         // set the view to 
-        mWindow.setView(gameCamera.getView());
+        window.setView(gameCamera.getView());
             // render all tiles from the world
-            worldRenderer.render(world, mWindow, gameCamera, dataHandler);
+            worldRenderer.render(world, window, gameCamera, dataHandler);
             // draw all renderables
             sortRenderables();
-            renderableRenderer.render(renderables, mWindow, dataHandler);
-
-        // end the current frame
-        mWindow.display();
+            renderableRenderer.render(renderables, window, dataHandler);
     }
 
     void loadTextures(){

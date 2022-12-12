@@ -3,23 +3,27 @@
 #include <functional>
 #include <Eigen/Core>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 struct button
 {
     Eigen::Vector2f position;
     Eigen::Vector2f size;
     std::function<void()> onClick;
+    std::string t = "undefined";
 
     int shade = 255;
 
     button(){}
-    button(int xPosition, int yPosition, int xSize, int ySize):position(xPosition, yPosition), size(xSize,ySize){}
+    button(int xPosition, int yPosition, int xSize, int ySize, std::string text):position(xPosition, yPosition), size(xSize,ySize), t(text){}
 };
 
 struct buttonHandler
 {
     int tSize;
     sf::Texture buttonStyle;
+    sf::Font font;
+    sf::Color textColor = sf::Color(0,0,0);
     std::vector<button> buttons;
     buttonHandler(){
 
@@ -53,7 +57,7 @@ struct buttonHandler
                 c.setTexture(buttonStyle);
                 c.setScale(wScale,hScale);
                 c.setTextureRect(sf::IntRect(tSize*1,tSize*1,tSize,tSize));
-                c.setColor(sf::Color(buttons[i].shade,buttons[i].shade,buttons[i].shade,buttons[i].shade));
+                c.setColor(sf::Color(buttons[i].shade,buttons[i].shade,buttons[i].shade, 255));
 
             // edges
             sf::Sprite t;
@@ -113,6 +117,17 @@ struct buttonHandler
                 dr.setTextureRect(sf::IntRect(tSize *2,tSize *2,tSize, tSize));
                 dr.setColor(sf::Color(buttons[i].shade,buttons[i].shade,buttons[i].shade,255));
 
+            sf::Text text;
+                text.setPosition(buttons[i].position.x() + buttons[i].size.x() /2, buttons[i].position.y() + buttons[i].size.y() /2);
+                text.setFont(font);
+                text.setString(buttons[i].t);
+                text.setCharacterSize(12);
+                text.setFillColor(textColor);
+
+                sf::Rect BB = text.getLocalBounds();
+                text.setOrigin(BB.width /2, BB.height);
+                
+
             pWindow.draw(c);
             pWindow.draw(t);
             pWindow.draw(d);
@@ -123,6 +138,10 @@ struct buttonHandler
             pWindow.draw(tr);
             pWindow.draw(dl);
             pWindow.draw(dr);
+
+            pWindow.draw(text);
+
+
         }
     }
 
@@ -155,8 +174,12 @@ struct buttonHandler
         buttons.back().onClick = f;
     }
 
-    void setStyle(const sf::Texture &newStyle, int tileSize){
+    void setButtonStyle(const sf::Texture &newStyle, int tileSize){
         buttonStyle = newStyle;
         tSize = tileSize;
+    }
+    void setTextStyle(sf::Font &pFont, sf::Color tColor){
+        font = pFont;
+        textColor = tColor;
     }
 };

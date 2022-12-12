@@ -1,16 +1,18 @@
 #pragma once
 
+
 #include <gameState.h>
 #include <camera.h>
 #include <world.h>
 #include <button.h>
 #include <dataHandler.h>
 #include <Eigen/Core>
+#include <string>
 
 class WorldEditor : public GameState
 {
 public:
-    sf::RenderWindow &mWindow;
+    InputHandler inputHandler;
     buttonHandler bHandler;
     Camera worldCamera;
     Camera uiCamera;
@@ -22,17 +24,20 @@ public:
 
     sf::Vector2i positionOld;
 
-    WorldEditor(sf::RenderWindow &pWindow): mWindow(pWindow){}
+    WorldEditor(sf::RenderWindow &rWindow, std::string worldName): GameState(rWindow)
+    {
+        dataHandler.loadWorldFromFile(worldName, world);
+    }
 
 
     void handleEvents(bool &pRunning){
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while (mWindow.pollEvent(event))
+        while (window.pollEvent(event))
         {
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed){
-                mWindow.close();
+                window.close();
                 pRunning = false;
                 std::cout << "window closed";
                 dataHandler.saveWorldToFile("editWorld.sv", world);
@@ -49,53 +54,11 @@ public:
         }
     }
 
-    void init(InputHandler &pInputHandler){
+    void init(){
         dataHandler.setSaveDirectory("data/saves", 3);
         dataHandler.setTextureDirectory("data/textures", 3);
-        dataHandler.loadWorldFromFile("world.sv", world);
+        dataHandler.loadFont("arial.ttf");
 
-        loadTextures();
-
-        pInputHandler.newMouseButton("left", sf::Mouse::Left);
-
-        bHandler.setStyle(dataHandler.getTexture("buttonStyleT"), 16);
-        bHandler.addButton(button(300,300,200,20), [](){std::cout << "working";});
-
-        world.setTileSize(32);
-        focus.x() = float((world.sizeX() * world.getTileSize()) / 2);
-        focus.y() = float((world.sizeY() * world.getTileSize()) / 2);
-        worldCamera.reset(sf::FloatRect(0.f, 0.f, float(mWindow.getSize().x), float(mWindow.getSize().y)));
-        worldCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
-        uiCamera.reset(sf::FloatRect(0.f, 0.f, float(mWindow.getSize().x), float(mWindow.getSize().y)));
-        uiCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
-    }
-
-    void update(InputHandler &pInputHandler, float &pDeltaTime){
-            worldCamera.follow(focus.x(), focus.y());
-            worldCamera.update();
-            selectTileType(pInputHandler);
-            edit();
-            moveFocus();
-            bHandler.updateButtons(mWindow, pInputHandler);
-    }
-
-    void draw(){
-        // clear the window with black color
-        mWindow.clear(sf::Color::Black);
-        // set the view to 
-        mWindow.setView(worldCamera.getView());
-            // render all tiles from the world
-            worldRenderer.render(world, mWindow, worldCamera, dataHandler);
-
-        mWindow.setView(uiCamera.getView());
-            displayTileUI();
-            bHandler.drawButtons(mWindow);
-
-        // end the current frame
-        mWindow.display();
-    }
-
-    void loadTextures(){
         dataHandler.loadTexture("grassT", "grass.png");
         dataHandler.loadTexture("rockT", "rock.png");
         dataHandler.loadTexture("boriumT", "borium.png");
@@ -104,11 +67,58 @@ public:
         dataHandler.loadTexture("worldEditorUIT", "worldEditorUI.png");
         dataHandler.loadTexture("worldIconT", "worldIcon.png");
         dataHandler.loadTexture("buttonStyleT", "buttonStyle.png");
+
+        inputHandler.newMouseButton("left", sf::Mouse::Left);
+        inputHandler.newMouseButton("right", sf::Mouse::Right);
+        inputHandler.newKeyboardKey("key_1", sf::Keyboard::Num1);
+        inputHandler.newKeyboardKey("key_2", sf::Keyboard::Num2);
+        inputHandler.newKeyboardKey("key_3", sf::Keyboard::Num3);
+        inputHandler.newKeyboardKey("key_4", sf::Keyboard::Num4);
+        inputHandler.newKeyboardKey("key_5", sf::Keyboard::Num5);
+
+        bHandler.setButtonStyle(dataHandler.getTexture("buttonStyleT"), 16);
+        bHandler.setTextStyle(dataHandler.font, sf::Color(0,0,0));
+
+        world.setTileSize(32);
+        focus.x() = float((world.sizeX() * world.getTileSize()) / 2);
+        focus.y() = float((world.sizeY() * world.getTileSize()) / 2);
+        worldCamera.reset(sf::FloatRect(0.f, 0.f, float(window.getSize().x), float(window.getSize().y)));
+        worldCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+        uiCamera.reset(sf::FloatRect(0.f, 0.f, float(window.getSize().x), float(window.getSize().y)));
+        uiCamera.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
     }
 
-    void moveFocus(){
+    void update(float &pDeltaTime){
+        // check for key input
+        inputHandler.update(window);
+
+            worldCamera.follow(focus.x(), focus.y());
+            worldCamera.update();
+            selectTileType();
+            edit();
+            moveFocus(inputHandler);
+
+
+            bHandler.updateButtons(window, inputHandler);
+
+        // reset key states on last call of game update
+        inputHandler.updateState();
+    }
+
+    void draw(){
+        // set the view to 
+        window.setView(worldCamera.getView());
+            // render all tiles from the world
+            worldRenderer.render(world, window, worldCamera, dataHandler);
+
+        window.setView(uiCamera.getView());
+            displayTileUI();
+            bHandler.drawButtons(window);
+    }
+
+    void moveFocus(InputHandler &inputHandler){
         sf::Vector2i position = sf::Mouse::getPosition();
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+        if (inputHandler.isMousePressed("right")){
              
             if(position != positionOld){
                 focus.x() += positionOld.x - position.x;
@@ -131,38 +141,38 @@ public:
     void displayTileUI(){
         sf::Sprite sprite;
         float scale = 2;
-        sprite.setPosition(0, (float)mWindow.getSize().y / 2 -(134 * scale));
+        sprite.setPosition(0, (float)window.getSize().y / 2 -(134 * scale));
         sprite.setColor(sf::Color(255,255,255,255));
         sprite.setScale(scale, scale);
         sprite.setTexture(dataHandler.getTexture("worldEditorUIT"));
-        mWindow.draw(sprite);
+        window.draw(sprite);
     }
     
-    void selectTileType(InputHandler &pInputHandler){
-        /*if(pInputHandler.key_1){
+    void selectTileType(){
+        if(inputHandler.isKeyPressed("key_1")){
             currentType = 0;
         }
-        if(pInputHandler.key_2){
+        if(inputHandler.isKeyPressed("key_2")){
             currentType = 1;
             
         }
-        if(pInputHandler.key_3){
+        if(inputHandler.isKeyPressed("key_3")){
             currentType = 2;
             
         }
-        if(pInputHandler.key_4){
+        if(inputHandler.isKeyPressed("key_4")){
             currentType = 3;
             
         }
-        if(pInputHandler.key_5){
+        if(inputHandler.isKeyPressed("key_5")){
             currentType = 4;
             
-        }*/
+        }
     }
     void edit(){
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-        sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
-            sf::Vector2f worldPos = mWindow.mapPixelToCoords(pixelPos, worldCamera.getView());
+        if(inputHandler.isMousePressed("left")){
+        sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, worldCamera.getView());
             sf::Vector2i gridPos;
             gridPos.x = int(worldPos.x / float(world.getTileSize()));
             gridPos.y = int(worldPos.y / float(world.getTileSize()));

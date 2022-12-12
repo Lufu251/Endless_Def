@@ -1,7 +1,9 @@
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <SFML/System.hpp>
 #include <Shlwapi.h>
 #include <filesystem>
+#include <cmath>
 
 #include <game.h>
 
